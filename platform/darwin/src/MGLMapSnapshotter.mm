@@ -17,7 +17,7 @@
 #import "MGLAttributionInfo_Private.h"
 #import "MGLLoggingConfiguration_Private.h"
 #import "MGLRendererConfiguration.h"
-#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
+#if TARGET_OS_IOS
 #import "MGLMapboxEvents.h"
 #endif
 
@@ -159,7 +159,7 @@ const CGFloat MGLSnapshotterMinimumPixelSize = 64;
 #else
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:NSApplicationWillTerminateNotification object:nil];
 #endif
-#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
+#if TARGET_OS_IOS
         [MGLMapboxEvents pushTurnstileEvent];
 #endif
     }
