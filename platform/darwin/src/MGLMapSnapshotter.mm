@@ -417,7 +417,10 @@ const CGFloat MGLSnapshotterMinimumPixelSize = 64;
 + (NSArray<MGLAttributionInfo *>*) generateAttributionInfos:(mbgl::MapSnapshotter::Attributions)attributions {
     NSMutableArray *infos = [NSMutableArray array];
     
-#if TARGET_OS_IPHONE
+#if TARGET_OS_TV
+    CGFloat fontSize = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote].pointSize;
+    UIColor *attributeFontColor = [UIColor blackColor];
+#elif TARGET_OS_IPHONE
     CGFloat fontSize = [UIFont smallSystemFontSize];
     UIColor *attributeFontColor = [UIColor blackColor];
 #else

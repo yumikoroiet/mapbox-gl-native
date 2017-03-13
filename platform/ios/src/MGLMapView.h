@@ -71,7 +71,7 @@ typedef NS_ENUM(NSUInteger, MGLUserTrackingMode) {
         remains enabled if the user zooms in. If the user rotates the map
         view, this tracking mode will fall back to `MGLUserTrackingModeFollow`.
      */
-    MGLUserTrackingModeFollowWithHeading,
+    MGLUserTrackingModeFollowWithHeading __TVOS_PROHIBITED,
     /**
         The map follows the user location and rotates when the course changes.
         Course represents the direction in which the device is traveling.
@@ -82,7 +82,7 @@ typedef NS_ENUM(NSUInteger, MGLUserTrackingMode) {
         remains enabled if the user zooms in. If the user rotates the map view,
         this tracking mode will fall back to `MGLUserTrackingModeFollow`.
      */
-    MGLUserTrackingModeFollowWithCourse,
+    MGLUserTrackingModeFollowWithCourse __TVOS_PROHIBITED,
 };
 
 /** Options for `MGLMapView.preferredFramesPerSecond`. */
@@ -514,7 +514,7 @@ MGL_EXPORT IB_DESIGNABLE
  transition. If you don’t want to animate the change, use the
  `-setTargetCoordinate:animated:` method instead.
  */
-@property (nonatomic, assign) CLLocationCoordinate2D targetCoordinate;
+@property (nonatomic, assign) CLLocationCoordinate2D targetCoordinate __TVOS_PROHIBITED;
 
 /**
  Sets the geographic coordinate that is the subject of observation as the user
@@ -534,7 +534,7 @@ MGL_EXPORT IB_DESIGNABLE
  @param animated If `YES`, the map animates to fit the target within the map
     view. If `NO`, the map fits the target instantaneously.
  */
-- (void)setTargetCoordinate:(CLLocationCoordinate2D)targetCoordinate animated:(BOOL)animated;
+- (void)setTargetCoordinate:(CLLocationCoordinate2D)targetCoordinate animated:(BOOL)animated __TVOS_PROHIBITED;
 
 #pragma mark Configuring How the User Interacts with the Map
 
@@ -565,6 +565,7 @@ MGL_EXPORT IB_DESIGNABLE
  */
 @property(nonatomic, getter=isScrollEnabled) BOOL scrollEnabled;
 
+#if !TARGET_OS_TV
 /**
  A Boolean value that determines whether the user may rotate the map,
  changing the direction.
@@ -592,6 +593,7 @@ MGL_EXPORT IB_DESIGNABLE
  The default value of this property is `YES`.
  */
 @property(nonatomic, getter=isPitchEnabled) BOOL pitchEnabled;
+#endif
 
 /**
  A Boolean value that determines whether the user will receive haptic feedback
