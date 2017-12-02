@@ -262,7 +262,7 @@ ipackage%:
 
 .PHONY: iframework
 iframework: $(IOS_PROJ_PATH)
-	FORMAT=$(FORMAT) BUILD_DEVICE=$(BUILD_DEVICE) SYMBOLS=$(SYMBOLS) \
+	FORMAT=$(FORMAT) BUILD_DEVICE=$(BUILD_DEVICE) BUILD_TV=$(BUILD_TV) SYMBOLS=$(SYMBOLS) \
 	./platform/ios/scripts/package.sh
 
 .PHONY: ideploy
