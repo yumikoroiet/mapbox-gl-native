@@ -73,6 +73,8 @@ src/mbgl/gl/features.hpp
 src/mbgl/gl/framebuffer.hpp
 src/mbgl/gl/gl.cpp
 src/mbgl/gl/gl.hpp
+src/mbgl/gl/gl_function_pointers.hpp
+src/mbgl/gl/gl_types.hpp
 src/mbgl/gl/index_buffer.hpp
 src/mbgl/gl/object.cpp
 src/mbgl/gl/object.hpp
