@@ -23,22 +23,9 @@ static_assert(underlying_type(DataType::Integer) == GL_INT, "OpenGL type mismatc
 static_assert(underlying_type(DataType::UnsignedInteger) == GL_UNSIGNED_INT, "OpenGL type mismatch");
 static_assert(underlying_type(DataType::Float) == GL_FLOAT, "OpenGL type mismatch");
 
-#if not MBGL_USE_GLES2
-static_assert(underlying_type(RenderbufferType::RGBA) == GL_RGBA8, "OpenGL type mismatch");
-#else
 static_assert(underlying_type(RenderbufferType::RGBA) == GL_RGBA8_OES, "OpenGL type mismatch");
-#endif // MBGL_USE_GLES2
-#if not MBGL_USE_GLES2
-static_assert(underlying_type(RenderbufferType::DepthStencil) == GL_DEPTH24_STENCIL8, "OpenGL type mismatch");
-#else
 static_assert(underlying_type(RenderbufferType::DepthStencil) == GL_DEPTH24_STENCIL8_OES, "OpenGL type mismatch");
-#endif // MBGL_USE_GLES2
-#if not MBGL_USE_GLES2
-static_assert(underlying_type(RenderbufferType::DepthComponent) == GL_DEPTH_COMPONENT, "OpenGL type mismatch");
-#else
 static_assert(underlying_type(RenderbufferType::DepthComponent) == GL_DEPTH_COMPONENT16, "OpenGL type mismatch");
-#endif // MBGL_USE_GLES2
-
 
 static_assert(underlying_type(PrimitiveType::Points) == GL_POINTS, "OpenGL type mismatch");
 static_assert(underlying_type(PrimitiveType::Lines) == GL_LINES, "OpenGL type mismatch");
@@ -63,10 +50,11 @@ static_assert(underlying_type(TextureFormat::Alpha) == GL_ALPHA, "OpenGL type mi
 static_assert(std::is_same<std::underlying_type_t<TextureType>, GLenum>::value, "OpenGL type mismatch");
 static_assert(underlying_type(TextureType::UnsignedByte) == GL_UNSIGNED_BYTE, "OpenGL type mismatch");
 
-#if MBGL_USE_GLES2 && GL_HALF_FLOAT_OES
+#if GL_HALF_FLOAT_OES
 static_assert(underlying_type(TextureType::HalfFloat) == GL_HALF_FLOAT_OES, "OpenGL type mismatch");
 #endif
-#if !MBGL_USE_GLES2 && GL_HALF_FLOAT_ARB
+
+#if GL_HALF_FLOAT_ARB
 static_assert(underlying_type(TextureType::HalfFloat) == GL_HALF_FLOAT_ARB, "OpenGL type mismatch");
 #endif
 
@@ -153,13 +141,9 @@ void Context::initializeExtensions(const std::function<gl::ProcAddress(const cha
         programBinary = std::make_unique<extension::ProgramBinary>(fn);
 #endif
 
-#if MBGL_USE_GLES2
         constexpr const char* halfFloatExtensionName = "OES_texture_half_float";
         constexpr const char* halfFloatColorBufferExtensionName = "EXT_color_buffer_half_float";
-#else
-        constexpr const char* halfFloatExtensionName = "ARB_half_float_pixel";
-        constexpr const char* halfFloatColorBufferExtensionName = "ARB_color_buffer_float";
-#endif
+
         if (strstr(extensions, halfFloatExtensionName) != nullptr &&
             strstr(extensions, halfFloatColorBufferExtensionName) != nullptr) {
 
@@ -413,17 +397,6 @@ std::unique_ptr<uint8_t[]> Context::readFramebuffer(const Size size, const Textu
     return data;
 }
 
-#if not MBGL_USE_GLES2
-void Context::drawPixels(const Size size, const void* data, TextureFormat format) {
-    pixelStoreUnpack = { 1 };
-    if (format != TextureFormat::RGBA) {
-        format = static_cast<TextureFormat>(GL_LUMINANCE);
-    }
-    getGLFunctionPointers().glDrawPixels(size.width, size.height, static_cast<GLenum>(format),
-                                  GL_UNSIGNED_BYTE, data);
-}
-#endif // MBGL_USE_GLES2
-
 namespace {
 
 void checkFramebuffer() {
@@ -631,13 +604,6 @@ void Context::setDirtyState() {
     activeTextureUnit.setDirty();
     pixelStorePack.setDirty();
     pixelStoreUnpack.setDirty();
-#if not MBGL_USE_GLES2
-    pointSize.setDirty();
-    pixelZoom.setDirty();
-    rasterPos.setDirty();
-    pixelTransferDepth.setDirty();
-    pixelTransferStencil.setDirty();
-#endif // MBGL_USE_GLES2
     for (auto& tex : texture) {
        tex.setDirty();
     }
@@ -682,14 +648,8 @@ void Context::setCullFaceMode(const CullFaceMode& mode) {
     frontFace = mode.frontFace;
 }
 
-#if not MBGL_USE_GLES2
-void Context::setDrawMode(const Points& points) {
-    pointSize = points.pointSize;
-}
-#else
 void Context::setDrawMode(const Points&) {
 }
-#endif // MBGL_USE_GLES2
 
 void Context::setDrawMode(const Lines& lines) {
     lineWidth = lines.lineWidth;

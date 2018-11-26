@@ -10,11 +10,7 @@ namespace value {
 const constexpr ClearDepth::Type ClearDepth::Default;
 
 void ClearDepth::Set(const Type& value) {
-#if MBGL_USE_GLES2
     getGLFunctionPointers().glClearDepthf(value);
-#else
-    getGLFunctionPointers().glClearDepth(value);
-#endif
 }
 
 ClearDepth::Type ClearDepth::Get() {
@@ -130,11 +126,7 @@ StencilOp::Type StencilOp::Get() {
 const constexpr DepthRange::Type DepthRange::Default;
 
 void DepthRange::Set(const Type& value) {
-#if MBGL_USE_GLES2
     getGLFunctionPointers().glDepthRangef(value.min, value.max);
-#else
-    getGLFunctionPointers().glDepthRange(value.min, value.max);
-#endif
 }
 
 DepthRange::Type DepthRange::Get() {
@@ -446,75 +438,6 @@ PixelStoreUnpack::Type PixelStoreUnpack::Get() {
     getGLFunctionPointers().glGetIntegerv(GL_UNPACK_ALIGNMENT, &value.alignment);
     return value;
 }
-
-#if not MBGL_USE_GLES2
-
-const constexpr PointSize::Type PointSize::Default;
-
-void PointSize::Set(const Type& value) {
-    getGLFunctionPointers().glPointSize(value);
-}
-
-PointSize::Type PointSize::Get() {
-    GLfloat pointSize;
-    getGLFunctionPointers().glGetFloatv(GL_POINT_SIZE, &pointSize);
-    return pointSize;
-}
-
-const constexpr PixelZoom::Type PixelZoom::Default;
-
-void PixelZoom::Set(const Type& value) {
-    getGLFunctionPointers().glPixelZoom(value.xfactor, value.yfactor);
-}
-
-PixelZoom::Type PixelZoom::Get() {
-    GLfloat xfactor, yfactor;
-    getGLFunctionPointers().glGetFloatv(GL_ZOOM_X, &xfactor);
-    getGLFunctionPointers().glGetFloatv(GL_ZOOM_Y, &yfactor);
-    return { xfactor, yfactor };
-}
-
-const constexpr RasterPos::Type RasterPos::Default;
-
-void RasterPos::Set(const Type& value) {
-    getGLFunctionPointers().glRasterPos4d(value.x, value.y, value.z, value.w);
-}
-
-RasterPos::Type RasterPos::Get() {
-    GLdouble pos[4];
-    getGLFunctionPointers().glGetDoublev(GL_CURRENT_RASTER_POSITION, pos);
-    return { pos[0], pos[1], pos[2], pos[3] };
-}
-
-const constexpr PixelTransferDepth::Type PixelTransferDepth::Default;
-
-void PixelTransferDepth::Set(const Type& value) {
-    getGLFunctionPointers().glPixelTransferf(GL_DEPTH_SCALE, value.scale);
-    getGLFunctionPointers().glPixelTransferf(GL_DEPTH_BIAS, value.bias);
-}
-
-PixelTransferDepth::Type PixelTransferDepth::Get() {
-    Type value;
-    getGLFunctionPointers().glGetFloatv(GL_DEPTH_SCALE, &value.scale);
-    getGLFunctionPointers().glGetFloatv(GL_DEPTH_BIAS, &value.bias);
-    return value;
-}
-
-const constexpr PixelTransferStencil::Type PixelTransferStencil::Default;
-
-void PixelTransferStencil::Set(const Type& value) {
-    getGLFunctionPointers().glPixelTransferf(GL_INDEX_SHIFT, value.shift);
-    getGLFunctionPointers().glPixelTransferf(GL_INDEX_OFFSET, value.offset);
-}
-
-PixelTransferStencil::Type PixelTransferStencil::Get() {
-    Type value;
-    getGLFunctionPointers().glGetIntegerv(GL_INDEX_SHIFT, &value.shift);
-    getGLFunctionPointers().glGetIntegerv(GL_INDEX_OFFSET, &value.offset);
-    return value;
-}
-
-#endif // MBGL_USE_GLES2
 
 } // namespace value
 } // namespace gl
