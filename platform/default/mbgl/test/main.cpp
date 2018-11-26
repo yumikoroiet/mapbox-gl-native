@@ -4,10 +4,20 @@
 #include <cerrno>
 #include <cstdio>
 
+namespace mbgl {
+namespace gl {
+
+void glLoader();
+
+} // gl
+} // mbgl
+
 #define xstr(s) str(s)
 #define str(s) #s
 
 int main(int argc, char *argv[]) {
+    mbgl::gl::glLoader();
+
 #ifdef WORK_DIRECTORY
     const int result = chdir(xstr(WORK_DIRECTORY));
     if (result != 0) {
