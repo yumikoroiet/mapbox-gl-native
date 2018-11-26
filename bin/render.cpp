@@ -14,7 +14,17 @@
 #include <iostream>
 #include <fstream>
 
+namespace mbgl {
+namespace gl {
+
+void glLoader();
+
+} // gl
+} // mbgl
+
 int main(int argc, char *argv[]) {
+    mbgl::gl::glLoader();
+
     args::ArgumentParser argumentParser("Mapbox GL render tool");
     args::HelpFlag helpFlag(argumentParser, "help", "Display this help menu", {"help"});
 

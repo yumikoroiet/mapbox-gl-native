@@ -19,6 +19,14 @@
 #include <cstdio>
 #include <array>
 
+namespace mbgl {
+namespace gl {
+
+void glLoader();
+
+} // gl
+} // mbgl
+
 namespace {
 
 GLFWView* view = nullptr;
@@ -35,6 +43,8 @@ void quit_handler(int) {
 }
 
 int main(int argc, char *argv[]) {
+    mbgl::gl::glLoader();
+
     args::ArgumentParser argumentParser("Mapbox GL GLFW example");
     args::HelpFlag helpFlag(argumentParser, "help", "Display this help menu", {'h', "help"});
 

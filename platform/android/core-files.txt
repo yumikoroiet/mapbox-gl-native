@@ -217,4 +217,4 @@ platform/android/src/jni.hpp
 platform/android/src/jni.cpp
 
 # GL
-platform/android/mbgl/gl/gl_impl.hpp
+platform/android/src/gl_loader.cpp

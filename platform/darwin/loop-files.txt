@@ -2,3 +2,6 @@
 platform/darwin/src/async_task.cpp
 platform/darwin/src/run_loop.cpp
 platform/darwin/src/timer.cpp
+
+# GL
+platform/darwin/src/gl_loader.cpp
