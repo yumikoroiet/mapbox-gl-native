@@ -1,5 +1,7 @@
 #include <mbgl/gl/gl.hpp>
 
+#include <cassert>
+
 namespace {
 
 mbgl::gl::GLFunctionPointers& getPointers() {
@@ -17,6 +19,8 @@ const GLFunctionPointers& getGLFunctionPointers() {
 }
 
 void setGLFunctionPointers(const GLFunctionPointers& pointers) {
+    assert(getPointers().glClear == nullptr);
+
     getPointers() = pointers;
 }
 
