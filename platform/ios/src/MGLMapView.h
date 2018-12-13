@@ -54,7 +54,7 @@ typedef NS_ENUM(NSUInteger, MGLAnnotationVerticalAlignment) {
  
  #### Related examples
  See the <a href="https://www.mapbox.com/ios-sdk/maps/examples/user-tracking-mode/">Switch between user tracking modes</a> example to learn how to toggle modes and how each mode behaves.
- */
+*/
 typedef NS_ENUM(NSUInteger, MGLUserTrackingMode) {
     /** The map does not follow the user location. */
     MGLUserTrackingModeNone              = 0,
