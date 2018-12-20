@@ -1054,9 +1054,9 @@ public:
                                        constant:size.height]];
     }
 
-    [containerView removeConstraints:constraints];
+    [NSLayoutConstraint deactivateConstraints:constraints];
     [constraints removeAllObjects];
-    [containerView addConstraints:updatedConstrants];
+    [NSLayoutConstraint activateConstraints:updatedConstrants];
     [constraints addObjectsFromArray:updatedConstrants];
 }
 
