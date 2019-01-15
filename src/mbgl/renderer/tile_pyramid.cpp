@@ -53,7 +53,7 @@ void TilePyramid::finishRender(PaintParameters& parameters) {
 }
 
 std::vector<std::reference_wrapper<RenderTile>> TilePyramid::getRenderTiles() {
-    return { renderTiles.begin(), renderTiles.end() };
+    return sortedTiles;
 }
 
 Tile* TilePyramid::getTile(const OverscaledTileID& tileID){
@@ -85,7 +85,7 @@ void TilePyramid::update(const std::vector<Immutable<style::Layer::Impl>>& layer
         }
 
         tiles.clear();
-        renderTiles.clear();
+        clearRenderTiles();
 
         return;
     }
@@ -183,7 +183,7 @@ void TilePyramid::update(const std::vector<Immutable<style::Layer::Impl>>& layer
         tile.markRenderedIdeal();
     };
 
-    renderTiles.clear();
+    clearRenderTiles();
 
     if (!panTiles.empty()) {
         algorithm::updateRenderables(getTileFn, createTileFn, retainTileFn,
@@ -204,6 +204,9 @@ void TilePyramid::update(const std::vector<Immutable<style::Layer::Impl>>& layer
             rendered.emplace(previouslyRenderedTile.first);
         }
     }
+
+    sortedTiles = std::vector<std::reference_wrapper<RenderTile>>(renderTiles.begin(), renderTiles.end());
+    std::sort(sortedTiles.begin(), sortedTiles.end(), [](const RenderTile& a, const RenderTile& b) { return a.id < b.id; });
 
     if (type != SourceType::Annotations) {
         size_t conservativeCacheSize =
@@ -297,13 +300,6 @@ std::unordered_map<std::string, std::vector<Feature>> TilePyramid::queryRendered
 
     mapbox::geometry::box<double> box = mapbox::geometry::envelope(queryGeometry);
 
-    std::vector<std::reference_wrapper<const RenderTile>> sortedTiles{ renderTiles.begin(),
-                                                                       renderTiles.end() };
-    std::sort(sortedTiles.begin(), sortedTiles.end(), [](const RenderTile& a, const RenderTile& b) {
-        return std::tie(a.id.canonical.z, a.id.canonical.y, a.id.wrap, a.id.canonical.x) <
-            std::tie(b.id.canonical.z, b.id.canonical.y, b.id.wrap, b.id.canonical.x);
-    });
-
     auto maxPitchScaleFactor = transformState.maxPitchScaleFactor();
 
     for (const RenderTile& renderTile : sortedTiles) {
@@ -363,6 +359,17 @@ void TilePyramid::dumpDebugLogs() const {
     for (const auto& pair : tiles) {
         pair.second->dumpDebugLogs();
     }
+}
+
+void TilePyramid::clearAll() {
+    tiles.clear();
+    clearRenderTiles();
+    cache.clear();
+}
+
+void TilePyramid::clearRenderTiles() {
+    renderTiles.clear();
+    sortedTiles.clear();
 }
 
 } // namespace mbgl
